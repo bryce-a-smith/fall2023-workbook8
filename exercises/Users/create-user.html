@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Json</title>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="users.html">Users</a>
+      </nav>
+    </header>
+    <main>
+      <div class="fieldset">
+        <form>
+          <label for="name-input">Name: </label>
+          <input id="name-input" type="text" />
+
+          <label for="user-name-input">Username: </label>
+          <input id="user-name-input" type="text" />
+
+          <label for="email-input">Email: </label>
+          <input id="email-input" type="text" />
+
+          <button type="button" id="submit-button">Submit</button>
+        </form>
+      </div>
+    </main>
+    <script>
+      "use script";
+
+      function init() {
+        const nameInput = document.querySelector("#name-input");
+        const userNameInput = document.querySelector("#user-name-input");
+        const emailInput = document.querySelector("#email-input");
+        const submitButton = document.querySelector("#submit-button");
+
+        function buildUser() {
+          let user = {
+            name: nameInput.value,
+            username: userNameInput.value,
+            email: emailInput.value,
+          };
+
+          return user;
+        }
+
+        async function saveUser(user) {
+          fetch("http://localhost:3000/users", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              //can set multiple headers here
+            },
+            body: JSON.stringify(user),
+          }).then((response) => {
+            window.location.href = "users.html";
+          });
+          // .then((user) => {
+          //   //console.log(user);
+          //   return user;
+          // });
+        }
+
+        async function createUser() {
+          let user = buildUser();
+
+          await saveUser(user);
+
+          return false;
+        }
+
+        submitButton.addEventListener("click", createUser);
+      }
+
+      window.onload = init;
+    </script>
+  </body>
+</html>
