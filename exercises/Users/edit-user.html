@@ -25,7 +25,7 @@
           <label for="email-input">Email: </label>
           <input id="email-input" type="text" />
 
-          <button type="button" id="submit-button">Submit</button>
+          <button type="button" id="edit-button">Edit</button>
         </form>
       </div>
     </main>
@@ -33,43 +33,69 @@
       "use script";
 
       function init() {
+        const urlParams = new URLSearchParams(location.search);
         const nameInput = document.querySelector("#name-input");
         const userNameInput = document.querySelector("#user-name-input");
         const emailInput = document.querySelector("#email-input");
-        const submitButton = document.querySelector("#submit-button");
+        const editButton = document.querySelector("#edit-button");
 
-        function buildUser() {
-          let user = {
+        async function getUser() {
+          let id = -1;
+          if (urlParams.has("id") === true) {
+            id = urlParams.get("id");
+          }
+
+          let response = await fetch(`http://localhost:3000/users/${id}`);
+          let data = await response.json();
+          return data;
+        }
+
+        function populateForm(user) {
+            nameInput.value = user.name;
+            userNameInput.value = user.username;
+            emailInput.value = user.email;
+        }
+
+        function buildUser(user1) {
+          let user2 = {
+            id: user1.id,
             name: nameInput.value,
             username: userNameInput.value,
             email: emailInput.value,
           };
 
-          return user;
+          return user2;
         }
 
-        async function saveUser(user) {
-          fetch("http://localhost:3000/users", {
-            method: "POST",
+        async function saveUser(user2) {
+          fetch(`http://localhost:3000/users/${user2.id}`, {
+            method: "PUT",
             headers: {
               "Content-Type": "application/json",
               //can set multiple headers here
             },
-            body: JSON.stringify(user),
+            body: JSON.stringify(user2),
           }).then((response) => {
             window.location.href = "users.html";
           });
         }
 
-        async function createUser() {
-          let user = buildUser();
+        async function displayUser() {
+          let user1 = await getUser();
 
-          saveUser(user);
-
-          return false;
+          populateForm(user1);
         }
 
-        submitButton.addEventListener("click", createUser);
+        async function editUser() {
+          let user1 = await getUser();
+
+          let user2 = await buildUser(user1);
+
+          saveUser(user2);
+        }
+
+        displayUser();
+        editButton.addEventListener("click", editUser);
       }
 
       window.onload = init;
