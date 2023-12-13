@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Json</title>
+    <link rel="stylesheet" href="css/styles.css" />
   </head>
   <body>
     <header>
@@ -68,6 +69,18 @@
 
           let td4 = tr.insertCell();
           td4.innerText = user.email;
+
+          let td5 = tr.insertCell();
+          let a1 = document.createElement("a");
+          a1.innerText = "edit";
+          a1.href = "edit-user.html";
+          td5.appendChild(a1);
+
+          let td6 = tr.insertCell();
+          let a2 = document.createElement("a");
+          a2.innerText = "delete";
+          a2.href = "delete-user.html";
+          td6.appendChild(a2);
         }
 
         // write functions to handle events
