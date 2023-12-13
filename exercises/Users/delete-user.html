@@ -26,13 +26,15 @@
         </thead>
         <tbody id="user-table-body"></tbody>
       </table>
+      <button id="delete-user-button">Delete Now</button>
     </main>
     <script>
       "use strict";
 
       function init() {
         const urlParams = new URLSearchParams(location.search);
-        let userTableBody = document.querySelector("#user-table-body");
+        const userTableBody = document.querySelector("#user-table-body");
+        const deleteUserButton = document.querySelector("#delete-user-button");
 
         async function getUser() {
           let id = -1;
@@ -46,7 +48,7 @@
         }
 
         function buildUserRow(user) {
-          let tr = usersTableBody.insertRow();
+          let tr = userTableBody.insertRow();
 
           let td1 = tr.insertCell();
           td1.innerText = user.id;
@@ -71,7 +73,20 @@
           buildTable(user);
         }
 
+        async function deleteUser() {
+          let user = await getUser();
+
+          fetch(`http://localhost:3000/users/${user.id}`, {
+            method: "DELETE",
+          })
+            .then(function (response) {
+              window.location.href = "users.html";
+            })
+        }
+
         loadUserDetails();
+
+        deleteUserButton.addEventListener("click", deleteUser);
       }
 
       window.onload = init;
