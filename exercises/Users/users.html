@@ -73,13 +73,13 @@
           let td5 = tr.insertCell();
           let a1 = document.createElement("a");
           a1.innerText = "edit";
-          a1.href = "edit-user.html";
+          a1.href = `edit-user.html?id=${user.id}`;
           td5.appendChild(a1);
 
           let td6 = tr.insertCell();
           let a2 = document.createElement("a");
           a2.innerText = "delete";
-          a2.href = "delete-user.html";
+          a2.href = `delete-user.html?id=${user.id}`;
           td6.appendChild(a2);
         }
 
